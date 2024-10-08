@@ -15,5 +15,5 @@ COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /add/lib
 COPY --from=build ${DEPENDENCY}/META-INF /add/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /add
 
-ENTRYPOINT ["java","-cp","app:app/lib/*", "gatedcommunity.GatedCommunityApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*", "projectfs44.GatedCommunityApplication"]
 
