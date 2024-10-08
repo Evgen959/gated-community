@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-foreign-keys-user-to-address" author="EvgenGrushchenko">
+
+        <addForeignKeyConstraint
+                baseTableName="user_address"
+                baseColumnNames="user_id"
+                constraintName="fk_user_address_to_user"
+                referencedTableName="user"
+                referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="user_address"
+                baseColumnNames="address_id"
+                constraintName="fk_user_address_to_address"
+                referencedTableName="address"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

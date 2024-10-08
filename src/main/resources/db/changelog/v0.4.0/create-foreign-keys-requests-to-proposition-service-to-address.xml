@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-foreign-keys-requests-to-proposition-service-to-address" author="EvgenGrushchenko">
+
+        <addForeignKeyConstraint
+                baseTableName="requests"
+                baseColumnNames="user_id"
+                constraintName="fk_requests_to_user"
+                referencedTableName="user"
+                referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="requests"
+                baseColumnNames="proposition_service_id"
+                constraintName="fk_requests_to_proposition_service"
+                referencedTableName="proposition_service"
+                referencedColumnNames="id"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="requests"
+                baseColumnNames="address_id"
+                constraintName="fk_requests_to_address"
+                referencedTableName="address"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

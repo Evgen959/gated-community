@@ -1,0 +1,6 @@
+docker run --name gated -p 5436:5432 -e POSTGRES_USER=postgres -e POSTGRES_DB=gatedcommunity -e POSTGRES_PASSWORD=pos1234 -d postgres
+
+
+jdbc:postgresql://localhost:5436/gatedcommunity
+
+
