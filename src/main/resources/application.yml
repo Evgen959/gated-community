@@ -36,9 +36,9 @@ server:
   servlet:
     context-path: /api
 
-#key:
-#  access: ${KEY_ACCESS}
-#  refresh: ${KEY_REFRESH}
+key:
+  access: ${KEY_ACCESS}
+  refresh: ${KEY_REFRESH}
 
 logging:
   file:
