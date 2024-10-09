@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class PropositionServiceDTO {
 
-//  todo  @Schema(description = "proposition_service unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "proposition_service unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //// null / 0
 
