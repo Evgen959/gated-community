@@ -1,14 +1,17 @@
 package projectfs44.gatedcommunity.model.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "address")
+@Schema(description = "Class that describes address")
 
 public class Address {
 
+    @Schema(description = "address unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

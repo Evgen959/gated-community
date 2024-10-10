@@ -9,14 +9,13 @@ import java.util.Objects;
 
 public class PropositionServiceDTO {
 
-    @Schema(description = "proposition_service unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //// null / 0
+    @Schema(description = "PropositionServiceDTO unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
+    private Long id;
 
-//  todo  @Schema(description = "proposition_service title", example = "Change lamp")
+     @Schema(description = "PropositionServiceDTO title", example = "Change lamp")
     private String title;
 
-//  todo  @Schema(description = "proposition_service description", example = "change old lamp nach new")
+     @Schema(description = "PropositionServiceDTO description", example = "change old lamp nacho new")
     private String description;
 
     private String image;

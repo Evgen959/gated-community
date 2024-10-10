@@ -1,29 +1,31 @@
 package projectfs44.gatedcommunity.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Objects;
 
+
+@Schema(description = "DTO for address")
+
 public class AddressDTO {
 
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")*/
-    private long id;
+    @Schema(description = "address unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
+    private Long id;
 
-   /* @Column(name = "street")*/
+
     private String street;
 
-    /*@Column(name = "number_house")*/
+
     private String numberHouse;
 
-    /*@Column(name = "city")*/
+
     private String city;
 
-   /* @Column(name = "index")*/
+
     private int index;
 
-   /* @Column(name = "active")*/
+    @Schema(description = "proposition_service unique identifier", example = "true", accessMode = Schema.AccessMode.READ_ONLY)
     @JsonIgnore
     private boolean active;
 

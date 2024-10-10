@@ -10,11 +10,12 @@ import java.util.Objects;
 @Schema(description = "Class that describes proposition_service")
 
 public class PropositionService {
+
     @Schema(description = "proposition_service unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id; //// null / 0
+    private Long id;
 
     @Schema(description = "proposition_service title", example = "Change lamp")
     @Column(name = "title")
