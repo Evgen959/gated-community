@@ -70,26 +70,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByName(String name) {
-        return null;
+        return repository.findUserByUserName(name)
+                .map(mapping::mapEntityToDTO)
+                .orElseThrow(() -> new RuntimeException("User not found: " + name));
+
     }
 
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
-        return null;
+
+        User user = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+
+        mapping.mapDTOToEntityUpdate(userDTO, user);
+        user.setActive(true);
+        return mapping.mapEntityToDTO(repository.save(user));
+
     }
 
     @Override
     public UserDTO deleteUserById(Long id) {
-        return null;
+        User user = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+
+        repository.deleteById(id);
+        return mapping.mapEntityToDTO(user);
     }
 
     @Override
     public UserDTO restoreUserById(Long id) {
-        return null;
+        User user = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+
+        user.setActive(true);
+        return mapping.mapEntityToDTO(repository.save(user));
     }
 
     @Override
     public UserDTO removeUserById(Long id) {
-        return null;
+        User user = repository.findById(id).orElseThrow(() -> new RuntimeException("User not found: " + id));
+        user.setActive(false);
+        return mapping.mapEntityToDTO(repository.save(user));
     }
 }
