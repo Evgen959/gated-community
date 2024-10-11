@@ -1,16 +1,25 @@
 package projectfs44.gatedcommunity.service;
 
+import jakarta.transaction.Transactional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import projectfs44.gatedcommunity.model.dto.UserDTO;
 import projectfs44.gatedcommunity.model.dto.UserRegisterDTO;
+import projectfs44.gatedcommunity.model.entity.ConfirmationCode;
 import projectfs44.gatedcommunity.model.entity.User;
 import projectfs44.gatedcommunity.repository.UserRepository;
+import projectfs44.gatedcommunity.service.interfaces.ConfirmationCodeService;
+import projectfs44.gatedcommunity.service.interfaces.EmailService;
+import projectfs44.gatedcommunity.service.interfaces.RoleService;
 import projectfs44.gatedcommunity.service.interfaces.UserService;
 import projectfs44.gatedcommunity.service.mapping.UserMappingService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,30 +28,71 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final UserMappingService mapping;
 
-    public UserServiceImpl(UserRepository repository, UserMappingService mapping) {
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final RoleService roleService;
+    private final EmailService emailService;
+    private final ConfirmationCodeService confirmationCodeService;
+
+    public UserServiceImpl(UserRepository repository, UserMappingService mapping, BCryptPasswordEncoder passwordEncoder, RoleService roleService, EmailService emailService, ConfirmationCodeService confirmationCodeService) {
         this.repository = repository;
         this.mapping = mapping;
+        this.passwordEncoder = passwordEncoder;
+        this.roleService = roleService;
+        this.emailService = emailService;
+        this.confirmationCodeService = confirmationCodeService;
     }
 
+    @Transactional
+    @Override
+    public void register(UserRegisterDTO registerDTO) {
+        User user = mapping.mapRegisterDTOToEntity(registerDTO);
+
+        Optional<User> optionalUser = repository.findByEmail(user.getEmail());
+        if (optionalUser.isPresent() && optionalUser.get().isActive()) {
+            throw new RuntimeException("Email " + user.getEmail() + " is already in use");
+        }
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+            ConfirmationCode codeOld = confirmationCodeService.findCodeByUser(user).orElse(null);
+            if (codeOld != null) {
+                confirmationCodeService.remove(codeOld);
+            }
+        } else {
+            user.setRoles(Set.of(roleService.getRoleUser()));
+        }
+        user.setPassword(passwordEncoder.encode(registerDTO.password()));
+
+        user.setActive(false);
+
+        repository.save(user);
+
+        emailService.sendConfirmationEmail(user);
+
+    }
+
+    @Transactional
+    @Override
+    public String confirmationMailByCode(String code) {
+        ConfirmationCode confirmationCode = confirmationCodeService.findByCode(code).orElseThrow(
+                () -> new RuntimeException("Code not found")
+        );
+
+        if (confirmationCode.getExpired().isAfter(LocalDateTime.now())) {
+            User user = confirmationCode.getUser();
+            user.setActive(true);
+            repository.save(user);
+            return user.getEmail() + " confirmed!";
+        }
+
+        throw new RuntimeException("Wrong code");
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findUserByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
-
-
-    @Override
-    public void register(UserRegisterDTO registerDTO) {
-
-    }
-
-
-    @Override
-    public String confirmationMailByCode(String code) {
-        return "Email successfully confirmed!";
-    }
-
 
     @Override
     public UserDTO saveUser(UserDTO userDTO) {
