@@ -18,11 +18,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class securityConfig {
+public class SecurityConfig {
 
     private final TokenFilter tokenFilter;
 
-    public securityConfig(TokenFilter tokenFilter) {
+    public SecurityConfig(TokenFilter tokenFilter) {
         this.tokenFilter = tokenFilter;
     }
 
@@ -40,6 +40,7 @@ public class securityConfig {
                                 .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/register", "auth/register").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/confirm").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh").permitAll()
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/offered-services/{id}").authenticated() //  только для аутентифицированных пользователей
