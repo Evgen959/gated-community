@@ -25,7 +25,7 @@ public class EmailServiceImpl implements EmailService {
     private  final Configuration mailConfiguration;
     private final ConfirmationCodeService codeService;
 
-    private final static String HOST = "http://localhost:8080/api";;
+    private final static String HOST = "https://gated-community-app-av8li.ondigitalocean.app/api";
 
     public EmailServiceImpl(JavaMailSender mailSender, Configuration mailConfiguration, ConfirmationCodeService codeService) {
         this.mailSender = mailSender;

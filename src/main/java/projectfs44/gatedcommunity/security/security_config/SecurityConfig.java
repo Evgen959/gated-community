@@ -45,8 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/offered-services/{id}").authenticated() //  только для аутентифицированных пользователей
                                 .requestMatchers(HttpMethod.POST, "/offered-services").hasRole("ADMIN")
-//                                .requestMatchers(HttpMethod.GET, "/offered-services*").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/offered-services*").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/offered-services*").authenticated()
                                 .requestMatchers(HttpMethod.PUT, "/offered-services/update/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/offered-services/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/offered-services/restore/{id}").hasRole("ADMIN")
