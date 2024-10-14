@@ -25,7 +25,8 @@ public class EmailServiceImpl implements EmailService {
     private  final Configuration mailConfiguration;
     private final ConfirmationCodeService codeService;
 
-    private final static String HOST = "https://gated-community-app-av8li.ondigitalocean.app/api";
+//    "https://gated-community-app-av8li.ondigitalocean.app/api"
+    private final static String HOST = System.getenv("L_HOST");
 
     public EmailServiceImpl(JavaMailSender mailSender, Configuration mailConfiguration, ConfirmationCodeService codeService) {
         this.mailSender = mailSender;
