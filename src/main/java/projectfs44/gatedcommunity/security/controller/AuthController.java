@@ -2,7 +2,11 @@ package projectfs44.gatedcommunity.security.controller;
 
 
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import projectfs44.gatedcommunity.exception_handling.Response;
+import projectfs44.gatedcommunity.model.dto.UserDTO;
 import projectfs44.gatedcommunity.model.dto.UserRegisterDTO;
 import projectfs44.gatedcommunity.security.dto.LoginRequestDto;
 import projectfs44.gatedcommunity.security.dto.RefreshRequestDto;
@@ -10,10 +14,6 @@ import projectfs44.gatedcommunity.security.dto.TokenResponseDto;
 import projectfs44.gatedcommunity.security.service.AuthService;
 import projectfs44.gatedcommunity.service.interfaces.UserService;
 import jakarta.security.auth.message.AuthException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
@@ -38,6 +38,12 @@ public class AuthController {
         }
     }
 
+    @GetMapping("/me")
+    public UserDTO getMe(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userService.getUserByName(username);
+    }
 
     @PostMapping("/refresh")
     public TokenResponseDto refreshAccessToken(@RequestBody RefreshRequestDto refreshRequestDto) {
