@@ -48,27 +48,36 @@ public class UserServiceImpl implements UserService {
         User user = mapping.mapRegisterDTOToEntity(registerDTO);
 
         Optional<User> optionalUser = repository.findByEmail(user.getEmail());
+
+        // Проверка, существует ли уже пользователь с таким email
         if (optionalUser.isPresent() && optionalUser.get().isActive()) {
             throw new RuntimeException("Email " + user.getEmail() + " is already in use");
         }
 
         if (optionalUser.isPresent()) {
+            // Пользователь в базе со статусом active - false
             user = optionalUser.get();
             ConfirmationCode codeOld = confirmationCodeService.findCodeByUser(user).orElse(null);
             if (codeOld != null) {
                 confirmationCodeService.remove(codeOld);
             }
         } else {
+            // Регистрация нового пользователя
+            // Присваиваем роль User новому пользователю
             user.setRoles(Set.of(roleService.getRoleUser()));
         }
+
+        // Устанавливаем зашифрованный пароль
         user.setPassword(passwordEncoder.encode(registerDTO.password()));
 
+        // На всякий случай
         user.setActive(false);
 
+        // Сохранить пользователя в БД
         repository.save(user);
 
+        // Отправляем письмо с кодом подтверждения
         emailService.sendConfirmationEmail(user);
-
     }
 
     @Transactional
