@@ -38,7 +38,6 @@ public class SecurityConfig {
 
 //                                .anyRequest().permitAll()
                                 .requestMatchers(HttpMethod.GET, "/hello").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/register", "/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/confirm").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh").permitAll()
@@ -46,6 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/offered-services/{id}").authenticated() //  только для аутентифицированных пользователей
                                 .requestMatchers(HttpMethod.POST, "/offered-services").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET, "/offered-services*").authenticated()
+//                                .requestMatchers(HttpMethod.GET, "/offered-services*").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/offered-services/update/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/offered-services/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/offered-services/restore/{id}").hasRole("ADMIN")
@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/addresses/{id}").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET,"/addresses").authenticated()
                                 .requestMatchers(HttpMethod.DELETE,"/addresses/{id}").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")//TODO СПРОСИТЬ!!!!!!!!!!!!
+                                .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.GET,"/users/{id}").authenticated()
                                 .requestMatchers(HttpMethod.GET,"/users").authenticated()
                                 .requestMatchers(HttpMethod.GET, "users/results").authenticated()
@@ -83,9 +83,3 @@ public class SecurityConfig {
     }
 
 }
-/*
-Уровни доступа!
-1. Получение всех продуктов - доступно всем пользователям, включая анонимных (аутентификация не требуется)
-2. Получение продукта по id - доступно только аутентифицированным пользователям с любой ролью
-3. Сохранение нового продукта - доступно только администраторам. (аутентифицирован + имеет роль ADMIN)
- */

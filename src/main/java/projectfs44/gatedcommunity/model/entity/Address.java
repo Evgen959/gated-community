@@ -37,31 +37,19 @@ public class Address {
 
     }
 
-    public Address(Long id, String street, String house, String city, int index, boolean active) {
-        this.id = id;
-        this.street = street;
-        this.numberHouse = house;
-        this.city = city;
-        this.index = index;
-        this.active = active;
-    }
-
     @Override
     public String toString() {
         return String.format("Address: id - %d, street - %s, numberHouse - %s, city - %s, index - %d, active - %s",
                 id, street, numberHouse, city, index, active ? "yes" : "no" );
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Address address)) return false;
-        return index == address.index && active == address.active && Objects.equals(id, address.id) && Objects.equals(street, address.street) && Objects.equals(numberHouse, address.numberHouse) && Objects.equals(city, address.city);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, street, numberHouse, city, index, active);
+    public Address(Long id, String street, String numberHouse, String city, int index, boolean active) {
+        this.id = id;
+        this.street = street;
+        this.numberHouse = numberHouse;
+        this.city = city;
+        this.index = index;
+        this.active = active;
     }
 
     public Long getId() {
@@ -96,6 +84,13 @@ public class Address {
         this.city = city;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     public boolean isActive() {
         return active;
@@ -105,11 +100,23 @@ public class Address {
         this.active = active;
     }
 
-    public int getIndex() {
-        return index;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Address address = (Address) o;
+        return index == address.index && active == address.active && Objects.equals(id, address.id) && Objects.equals(street, address.street) && Objects.equals(numberHouse, address.numberHouse) && Objects.equals(city, address.city);
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(street);
+        result = 31 * result + Objects.hashCode(numberHouse);
+        result = 31 * result + Objects.hashCode(city);
+        result = 31 * result + index;
+        result = 31 * result + Boolean.hashCode(active);
+        return result;
     }
 }

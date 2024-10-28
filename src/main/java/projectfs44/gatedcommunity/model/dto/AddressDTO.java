@@ -10,27 +10,18 @@ import java.util.Objects;
 
 public class AddressDTO {
 
-    @Schema(description = "address unique identifier", example = "777", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
-
 
     private String street;
 
-
     private String numberHouse;
-
 
     private String city;
 
-
     private int index;
 
-    @Schema(description = "proposition_service unique identifier", example = "true", accessMode = Schema.AccessMode.READ_ONLY)
     @JsonIgnore
     private boolean active;
-
-    public AddressDTO() {
-    }
 
     public AddressDTO(Long id, String street, String numberHouse, String city, int index, boolean active) {
         this.id = id;
@@ -41,23 +32,13 @@ public class AddressDTO {
         this.active = active;
     }
 
+    public AddressDTO() {
+    }
+
     @Override
     public String toString() {
         return String.format("Address: id - %d, street - %s, numberHouse - %s, city - %s, index - %d",
                 id, street, numberHouse, city, index);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AddressDTO that = (AddressDTO) o;
-        return index == that.index && active == that.active && Objects.equals(id, that.id) && Objects.equals(street, that.street) && Objects.equals(numberHouse, that.numberHouse) && Objects.equals(city, that.city);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, street, numberHouse, city, index, active);
     }
 
     public Long getId() {
@@ -106,5 +87,25 @@ public class AddressDTO {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AddressDTO that = (AddressDTO) o;
+        return index == that.index && active == that.active && Objects.equals(id, that.id) && Objects.equals(street, that.street) && Objects.equals(numberHouse, that.numberHouse) && Objects.equals(city, that.city);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(street);
+        result = 31 * result + Objects.hashCode(numberHouse);
+        result = 31 * result + Objects.hashCode(city);
+        result = 31 * result + index;
+        result = 31 * result + Boolean.hashCode(active);
+        return result;
     }
 }

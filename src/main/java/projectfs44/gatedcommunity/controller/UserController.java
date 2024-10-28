@@ -1,6 +1,9 @@
 package projectfs44.gatedcommunity.controller;
 
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import projectfs44.gatedcommunity.model.dto.UserDTO;
 import projectfs44.gatedcommunity.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,9 +33,24 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDTO getUserById(
             @Parameter(description = "The id that needs to de fetch", required = true) @PathVariable("id") long id){
-
-        //  обращаемся к сервису для получения сервиса по id
         return userService.getUserById(id);
+    }
+
+    @PutMapping("/{Id}/address/{addressId}")
+    public UserDTO addAddressToUser(
+            @PathVariable Long Id,
+            @PathVariable Long addressId) {
+      return  userService.addUserAddress(Id, addressId);
+
+    }
+
+    @DeleteMapping("/{userId}/address/{addressId}")
+    public UserDTO removeAddressFromUser(
+            @PathVariable Long userId,
+            @PathVariable Long addressId) {
+
+            return userService.removeUserAddress(userId, addressId);
+
     }
 
     @GetMapping
@@ -50,6 +68,13 @@ public class UserController {
         }
     }
 
+    @GetMapping("/me")
+    public UserDTO getMe(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return userService.getUserByName(username);
+
+    }
 
 
     @PutMapping("/update/{id}")

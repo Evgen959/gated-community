@@ -27,7 +27,7 @@ public class AddressServiceImpl implements AddressService {
     public AddressDTO saveAddress(AddressDTO addressDTO) {
 
         Address address = addressMappingService.mapDtoToEntity(addressDTO);
-        address.setActive(true);
+       // address.setActive(true);
         return addressMappingService.mapEntityToDto(addressRepository.save(address));
     }
 
