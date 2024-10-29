@@ -7,7 +7,7 @@ import projectfs44.gatedcommunity.model.dto.UserRegisterDTO;
 import projectfs44.gatedcommunity.security.dto.LoginRequestDto;
 import projectfs44.gatedcommunity.security.dto.RefreshRequestDto;
 import projectfs44.gatedcommunity.security.dto.TokenResponseDto;
-import projectfs44.gatedcommunity.security.service.AuthService;
+
 import projectfs44.gatedcommunity.service.interfaces.UserService;
 import jakarta.security.auth.message.AuthException;
 import org.springframework.web.bind.annotation.PostMapping;
