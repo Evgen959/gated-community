@@ -3,10 +3,11 @@ package projectfs44.gatedcommunity.model.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name ="proposition_service")
+@Table(name = "proposition_service")
 @Schema(description = "Class that describes proposition_service")
 
 public class PropositionService {
@@ -32,44 +33,25 @@ public class PropositionService {
     @Column
     private boolean active; // null / false
 
+    @OneToMany(mappedBy = "propositionService", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PropositionServiceFile> files;
 
     public PropositionService() {
-
     }
 
     @Override
     public String toString() {
         return String.format("PropositionService: id - %d, title - %s, description - %s, active - %s",
-                id, title, description, active ? "yes" : "no" );
+                id, title, description, active ? "yes" : "no");
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PropositionService that = (PropositionService) o;
-        return active == that.active && Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(image, that.image);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hashCode(id);
-        result = 31 * result + Objects.hashCode(title);
-        result = 31 * result + Objects.hashCode(description);
-        result = 31 * result + Objects.hashCode(image);
-        result = 31 * result + Boolean.hashCode(active);
-        return result;
-    }
-
-
-    public PropositionService(Long id, String title, String description, String image, boolean active) {
+    public PropositionService(Long id, String title, String description, String image, boolean active, List<PropositionServiceFile> files) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.image = image;
         this.active = active;
+        this.files = files;
     }
 
     public Long getId() {
@@ -110,5 +92,33 @@ public class PropositionService {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<PropositionServiceFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<PropositionServiceFile> files) {
+        this.files = files;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PropositionService that = (PropositionService) o;
+        return active == that.active && Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(image, that.image) && Objects.equals(files, that.files);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(title);
+        result = 31 * result + Objects.hashCode(description);
+        result = 31 * result + Objects.hashCode(image);
+        result = 31 * result + Boolean.hashCode(active);
+        result = 31 * result + Objects.hashCode(files);
+        return result;
     }
 }

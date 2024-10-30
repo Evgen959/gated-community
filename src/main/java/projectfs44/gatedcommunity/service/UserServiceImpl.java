@@ -54,10 +54,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found: " + Id));
         Address address = addressRepository.findById(addressId)// Найти адрес по addressId
                 .orElseThrow(() -> new RuntimeException("Address not found: " + addressId));
-        user.getAddresses().add(address);// Добавляем адрес пользователю
-       // repository.save(user);   // Сохранить пользователя с обновленным списком адресов
+        user.getAddresses().add(address);
         return mapper.mapEntityToDTO(repository.save(user));
-        //return null;
+
     }
     @Transactional
     @Override

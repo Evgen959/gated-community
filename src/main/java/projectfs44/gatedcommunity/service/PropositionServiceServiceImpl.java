@@ -1,16 +1,22 @@
 package projectfs44.gatedcommunity.service;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import projectfs44.gatedcommunity.exception_handling.exceptions.TextException;
 import projectfs44.gatedcommunity.model.dto.PropositionServiceDTO;
 import projectfs44.gatedcommunity.model.entity.PropositionService;
+import projectfs44.gatedcommunity.model.entity.PropositionServiceFile;
 import projectfs44.gatedcommunity.repository.PropositionServiceRepository;
 import projectfs44.gatedcommunity.service.interfaces.PropositionServiceService;
 import projectfs44.gatedcommunity.service.mapping.PropositionServiceMappingService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
 
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PropositionServiceServiceImpl implements PropositionServiceService {
@@ -23,27 +29,53 @@ public class PropositionServiceServiceImpl implements PropositionServiceService 
         this.mapper = mapper;
     }
 
-    @Transactional
     @Override
-    public void attachImage(String imageUrl, String PropositionServiceTitle) {
-
-    }
-
-    @Override
-    public PropositionServiceDTO savePropositionService(PropositionServiceDTO propositionServiceDTO) {
+    public PropositionServiceDTO savePropositionService(PropositionServiceDTO propositionServiceDTO, List<MultipartFile> files) {
+        if (propositionServiceDTO == null) {
+            throw new IllegalArgumentException("PropositionServiceDTO cannot be null");
+        }
         PropositionService propositionService = mapper.mapDtoToEntity(propositionServiceDTO);
         propositionService.setActive(true);
-        return mapper.mapEntityToDto(repository.save(propositionService));
+
+        if (files != null) {
+            List<PropositionServiceFile> propositionServiceFiles = new ArrayList<>(); // Список для файлов
+
+            for (MultipartFile file : files) {
+                try {
+                    byte[] fileData = file.getBytes(); // Получаем данные файла как byte[]
+                    PropositionServiceFile propositionServiceFile = new PropositionServiceFile();
+                    propositionServiceFile.setFileData(fileData); // Устанавливаем данные файла
+                    propositionServiceFile.setPropositionService(propositionService); // Устанавливаем связь с услугой
+
+                    propositionServiceFiles.add(propositionServiceFile);
+                    System.out.println("Получен файл: " + file.getOriginalFilename() + ", Тип содержимого: " + file.getContentType());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            propositionService.setFiles(propositionServiceFiles); // Устанавливаем файлы в сущность услуги
+        } else {
+            System.out.println("Файлы не были получены");
+        }
+
+        try {
+            PropositionService savedService = repository.save(propositionService); // Сохраняем услугу и связанные файлы
+            return mapper.mapEntityToDto(savedService); // Возвращаем DTO сохраненной сущности
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save PropositionService", e);
+        }
     }
+
 
     @Override
     public PropositionServiceDTO getPropositionServiceById(long id) {
         PropositionService propositionService = repository.findById(id).orElse(null);
 
-        if (propositionService == null ){
-            throw  new TextException("Proposition service with id" + id + " not found");
+        if (propositionService == null) {
+            throw new TextException("Proposition service with id" + id + " not found");
         }
-        if (!propositionService.isActive()){
+        if (!propositionService.isActive()) {
             throw new TextException("Proposition service not activity");
         }
 
@@ -58,16 +90,24 @@ public class PropositionServiceServiceImpl implements PropositionServiceService 
                 .toList();
     }
 
+    @Transactional
     @Override
     public List<PropositionServiceDTO> getAllPropositionService() {
         return repository.findAll().stream()
-                // фильтруем
                 .filter(PropositionService::isActive)
-                // превращаем элемент стрима из Product в стрим ProductDTO
                 .map(mapper::mapEntityToDto)
-                // собираем обратно в список
-                .toList();
+                .collect(Collectors.toList());
     }
+//    @Override
+//    public List<PropositionServiceDTO> getAllPropositionService() {
+//        return repository.findAll().stream()
+//                // фильтруем
+//                .filter(PropositionService::isActive)
+//                // превращаем элемент стрима из Product в стрим ProductDTO
+//                .map(mapper::mapEntityToDto)
+//                // собираем обратно в список
+//                .toList();
+//    }
 
     @Override
     public PropositionServiceDTO updatePropositionService(Long id, PropositionServiceDTO propositionServiceDTO) {

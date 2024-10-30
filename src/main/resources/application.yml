@@ -15,6 +15,11 @@ spring:
       hibernate:
         auto_quote_keyword: true
 
+  servlet:
+    multipart:
+      max-file-size: 10MB    # Увеличьте лимит на размер загружаемого файла
+      max-request-size: 10MB  # Увеличьте лимит на размер запроса
+
   mail:
     username: ${MAIL_USERNAME}
     password: ${MAIL_PASSWORD}

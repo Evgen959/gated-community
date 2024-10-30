@@ -1,14 +1,13 @@
 package projectfs44.gatedcommunity.service.interfaces;
 
+import org.springframework.web.multipart.MultipartFile;
 import projectfs44.gatedcommunity.model.dto.PropositionServiceDTO;
 
 import java.util.List;
 
 public interface PropositionServiceService {
 
-    void attachImage(String imageUrl, String PropositionServiceTitle);
-
-    PropositionServiceDTO savePropositionService(PropositionServiceDTO propositionServiceDTO);
+    PropositionServiceDTO savePropositionService(PropositionServiceDTO propositionServiceDTO, List<MultipartFile> files);
 
     PropositionServiceDTO getPropositionServiceById(long id);
 
