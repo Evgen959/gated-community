@@ -12,7 +12,6 @@ import projectfs44.gatedcommunity.repository.PropositionServiceRepository;
 import projectfs44.gatedcommunity.service.interfaces.PropositionServiceService;
 import projectfs44.gatedcommunity.service.mapping.PropositionServiceMappingService;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
