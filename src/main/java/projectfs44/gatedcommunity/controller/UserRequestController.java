@@ -1,5 +1,6 @@
 package projectfs44.gatedcommunity.controller;
 
+import org.springframework.transaction.annotation.Transactional;
 import projectfs44.gatedcommunity.model.dto.UserRequestDTO;
 import projectfs44.gatedcommunity.service.interfaces.UserRequestService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,6 +36,7 @@ public class UserRequestController {
         return userRequestService.getUserRequestById(id);
     }
 
+    @Transactional
     @GetMapping
     public List<UserRequestDTO> getAllUserRequests() {
         return userRequestService.getAllUserRequest();
